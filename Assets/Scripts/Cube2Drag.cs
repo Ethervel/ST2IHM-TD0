@@ -10,6 +10,8 @@ public class Cube2Drag : MonoBehaviour
     {
         zCoord = Camera.main.WorldToScreenPoint(transform.position).z;
         offset = transform.position - GetMouseWorldPos();
+        if (GameManager.Instance != null)
+            GameManager.Instance.cube3Done = true;
     }
 
     void OnMouseDrag()

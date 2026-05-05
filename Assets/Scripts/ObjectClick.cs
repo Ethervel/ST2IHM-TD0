@@ -8,7 +8,6 @@ public class ObjectClick : MonoBehaviour
 
     void Start()
     {
-        // Le pivot s'appelle "Porte", le mesh enfant "PorteMesh"
         GameObject door = GameObject.Find("Porte");
         if (door != null)
             doorAnimator = door.GetComponent<Animator>();
@@ -20,7 +19,6 @@ public class ObjectClick : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-
             if (Physics.Raycast(ray, out hit))
                 Manage(hit.collider.gameObject);
         }
@@ -33,20 +31,23 @@ public class ObjectClick : MonoBehaviour
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             if (rb != null)
                 rb.AddForce(Vector3.up * force);
+            if (GameManager.Instance != null)
+                GameManager.Instance.cube1Done = true;
         }
         else if (obj.name == "Cube1")
         {
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             if (rb != null)
                 rb.AddForce(transform.forward * force);
+            if (GameManager.Instance != null)
+                GameManager.Instance.cube2Done = true;
         }
         else if (obj.name == "Porte" || obj.name == "PorteMesh")
         {
-            if (doorAnimator != null)
-            {
-                doorOpen = !doorOpen;
-                doorAnimator.Play(doorOpen ? "DoorOpen" : "DoorClose");
-            }
+            if (doorAnimator == null) return;
+            if (GameManager.Instance != null && !GameManager.Instance.AllCubesDone()) return;
+            doorOpen = !doorOpen;
+            doorAnimator.Play(doorOpen ? "DoorOpen" : "DoorClose");
         }
     }
 }
